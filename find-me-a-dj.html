@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Me a DJ — Book the Right DJ. Tonight.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a3a2a;
+    --forest-deep: #122a1e;
+    --forest-mid: #224d38;
+    --forest-light: #2d6b4a;
+    --forest-pale: #3a8a5e;
+    --white: #f8f7f3;
+    --off-white: #efefea;
+    --card: #ffffff;
+    --border: rgba(26,58,42,0.12);
+    --border-strong: rgba(26,58,42,0.22);
+    --muted: #7a8c82;
+    --text: #1a2e22;
+    --text-light: rgba(26,46,34,0.55);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 3rem;
+    background: rgba(248,247,243,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    letter-spacing: 0.1em;
+    color: var(--forest);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--forest); }
+
+  .nav-cta {
+    background: var(--forest) !important;
+    color: var(--white) !important;
+    padding: 0.55rem 1.4rem;
+    font-weight: 500 !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.1em !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--forest-mid) !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding: 9rem 3rem 6rem;
+    text-align: center;
+    overflow: hidden;
+    background: var(--forest-deep);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 110%, rgba(45,107,74,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 15% 25%, rgba(45,107,74,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 30% 30% at 85% 20%, rgba(45,107,74,0.08) 0%, transparent 50%);
+  }
+
+  .visualizer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 160px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 2rem;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  .bar {
+    width: 4px;
+    background: linear-gradient(to top, #3a8a5e, transparent);
+    border-radius: 2px 2px 0 0;
+    animation: pulse var(--dur, 1.2s) ease-in-out infinite alternate;
+    transform-origin: bottom;
+  }
+
+  @keyframes pulse {
+    from { transform: scaleY(0.15); }
+    to   { transform: scaleY(1); }
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 860px; }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    color: var(--forest-pale);
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 11vw, 10rem);
+    line-height: 0.92;
+    letter-spacing: 0.03em;
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+    color: var(--white);
+  }
+
+  .hero-headline span { color: var(--forest-pale); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: rgba(248,247,243,0.5);
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-pills {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.75s forwards;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1.1rem;
+    border: 1px solid rgba(58,138,94,0.4);
+    background: rgba(58,138,94,0.1);
+    color: var(--forest-pale);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+
+  .pill-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--forest-pale);
+    flex-shrink: 0;
+  }
+
+  .hero-form {
+    display: flex;
+    max-width: 460px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+    border: 1px solid rgba(58,138,94,0.3);
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 1rem 1.4rem;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+
+  .hero-form input::placeholder { color: rgba(248,247,243,0.3); }
+
+  .hero-form button {
+    background: var(--forest-pale);
+    color: var(--white);
+    border: none;
+    padding: 1rem 1.8rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .hero-form button:hover { background: var(--forest-light); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-section {
+    border-top: 1px solid var(--border-strong);
+    border-bottom: 1px solid var(--border-strong);
+    padding: 0.9rem 0;
+    overflow: hidden;
+    background: var(--off-white);
+  }
+
+  .marquee-track {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 2rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .marquee-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--forest-pale);
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 7rem 3rem; }
+  .container { max-width: 1140px; margin: 0 auto; }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--forest-pale);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--forest-pale);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+
+  /* ─── VALUE PROPS ─── */
+  .value-section { background: var(--white); padding: 7rem 3rem; }
+
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-strong);
+    border: 1px solid var(--border-strong);
+    margin-top: 4rem;
+  }
+
+  .value-card {
+    background: var(--white);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: background 0.25s;
+  }
+
+  .value-card:hover { background: var(--off-white); }
+
+  .value-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--forest);
+  }
+
+  .value-icon { font-size: 2rem; margin-bottom: 1.5rem; display: block; }
+
+  .value-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    letter-spacing: 0.04em;
+    color: var(--forest);
+    margin-bottom: 0.8rem;
+    line-height: 1.05;
+  }
+
+  .value-desc { color: var(--text-light); font-size: 0.92rem; line-height: 1.75; }
+
+  /* ─── FOR WHO SPLIT ─── */
+  .for-who {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border-strong);
+    border: 1px solid var(--border-strong);
+  }
+
+  .for-panel { padding: 4rem 3.5rem; position: relative; overflow: hidden; }
+  .for-panel.events { background: var(--forest-deep); color: var(--white); }
+  .for-panel.djs { background: var(--off-white); color: var(--text); }
+
+  .panel-icon { font-size: 2.2rem; margin-bottom: 2rem; display: block; }
+
+  .panel-heading {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+    line-height: 1;
+  }
+
+  .for-panel.events .panel-heading { color: var(--white); }
+  .for-panel.events .panel-heading span { color: var(--forest-pale); }
+  .for-panel.djs .panel-heading { color: var(--forest); }
+  .for-panel.djs .panel-heading span { color: var(--forest-mid); }
+
+  .panel-body { font-size: 0.95rem; line-height: 1.75; margin-bottom: 2rem; }
+  .for-panel.events .panel-body { color: rgba(248,247,243,0.55); }
+  .for-panel.djs .panel-body { color: var(--text-light); }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .for-panel.events .feature-list li { color: rgba(248,247,243,0.75); }
+  .for-panel.djs .feature-list li { color: var(--text-light); }
+  .feature-list li::before { content: '→'; flex-shrink: 0; font-weight: 700; }
+  .for-panel.events .feature-list li::before { color: var(--forest-pale); }
+  .for-panel.djs .feature-list li::before { color: var(--forest-mid); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 2rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-white { background: var(--white); color: var(--forest); }
+  .btn-white:hover { background: var(--off-white); }
+  .btn-forest { background: var(--forest); color: var(--white); }
+  .btn-forest:hover { background: var(--forest-mid); }
+  .btn-outline { background: transparent; border: 1px solid var(--border-strong); color: var(--text); }
+  .btn-outline:hover { border-color: var(--forest); color: var(--forest); }
+
+  /* ─── HOW IT WORKS ─── */
+  .how-section { background: var(--off-white); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-strong);
+    margin-top: 4rem;
+    border: 1px solid var(--border-strong);
+  }
+
+  .step {
+    background: var(--off-white);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: background 0.25s;
+  }
+
+  .step:hover { background: var(--white); }
+
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 6rem;
+    color: rgba(26,58,42,0.06);
+    line-height: 1;
+    position: absolute;
+    top: 1.5rem; right: 2rem;
+    letter-spacing: -0.02em;
+  }
+
+  .step-icon { font-size: 1.8rem; margin-bottom: 1.5rem; }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.8rem;
+    color: var(--forest);
+    line-height: 1.1;
+  }
+
+  .step-desc { color: var(--text-light); font-size: 0.9rem; line-height: 1.7; }
+
+  /* ─── DJ PROFILES ─── */
+  .dj-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-strong);
+    border: 1px solid var(--border-strong);
+    margin-top: 4rem;
+  }
+
+  .dj-card {
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+
+  .dj-card:hover { background: var(--off-white); }
+  .dj-card:hover .dj-overlay { opacity: 1; }
+
+  .dj-avatar-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-bg { position: absolute; inset: 0; }
+
+  .avatar-initials {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 2;
+    opacity: 0.7;
+  }
+
+  .dj-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    aspect-ratio: 1;
+    background: rgba(26,58,42,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .play-btn {
+    width: 56px; height: 56px;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    padding-left: 3px;
+    color: var(--white);
+  }
+
+  .dj-info { padding: 1.5rem 1.8rem 2rem; }
+
+  .dj-name {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+    color: var(--forest);
+  }
+
+  .dj-genre {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--forest-pale);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .dj-location { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; }
+
+  .dj-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+
+  .tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid var(--border-strong);
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .dj-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .dj-rate {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--forest);
+    letter-spacing: 0.04em;
+  }
+
+  .dj-rate span { font-family: var(--font-body); font-size: 0.7rem; color: var(--muted); letter-spacing: 0; }
+
+  .dj-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text);
+  }
+
+  .star { color: var(--forest-pale); }
+
+  /* ─── REVIEWS ─── */
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-strong);
+    border: 1px solid var(--border-strong);
+    margin-top: 4rem;
+  }
+
+  .review-card {
+    background: var(--white);
+    padding: 2.5rem 2rem;
+    transition: background 0.25s;
+  }
+
+  .review-card:hover { background: var(--off-white); }
+
+  .review-stars { color: var(--forest-pale); font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 1.2rem; }
+
+  .review-text {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .review-author { display: flex; align-items: center; gap: 0.8rem; }
+
+  .author-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    color: var(--white);
+  }
+
+  .author-name { font-size: 0.85rem; font-weight: 500; color: var(--text); margin-bottom: 0.1rem; }
+  .author-role { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; }
+
+  /* ─── CTA BAND ─── */
+  .cta-band {
+    background: var(--forest-deep);
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-band::before {
+    content: 'FIND ME A DJ';
+    font-family: var(--font-display);
+    font-size: 13rem;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.04;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    color: var(--white);
+    pointer-events: none;
+  }
+
+  .cta-heading {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    color: var(--white);
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-heading span { color: var(--forest-pale); }
+
+  .cta-sub {
+    color: rgba(248,247,243,0.5);
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .btn-outline-light {
+    background: transparent;
+    border: 1px solid rgba(248,247,243,0.25);
+    color: rgba(248,247,243,0.75);
+    padding: 0.85rem 2rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-outline-light:hover { border-color: rgba(248,247,243,0.6); color: var(--white); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--off-white);
+    border-top: 1px solid var(--border-strong);
+    padding: 3rem 3rem 2rem;
+  }
+
+  .footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-strong);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-logo { font-family: var(--font-display); font-size: 2rem; color: var(--forest); letter-spacing: 0.08em; line-height: 1; margin-bottom: 0.5rem; }
+  .footer-tagline { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.08em; }
+  .footer-links { display: flex; gap: 4rem; flex-wrap: wrap; }
+
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--forest);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 0.5rem; }
+  .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--forest); }
+
+  .footer-bottom {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-copy { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; }
+  .footer-legal { display: flex; gap: 2rem; }
+  .footer-legal a { font-size: 0.72rem; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; }
+  .footer-legal a:hover { color: var(--forest); }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .value-section { padding: 5rem 1.5rem; }
+    .value-grid { grid-template-columns: 1fr; }
+    .for-who { grid-template-columns: 1fr; }
+    .for-panel { padding: 3rem 2rem; }
+    .steps { grid-template-columns: 1fr; }
+    .dj-grid { grid-template-columns: 1fr 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .hero { padding: 7rem 1.5rem 5rem; }
+    .footer-inner { flex-direction: column; }
+    .footer-links { gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .dj-grid { grid-template-columns: 1fr; }
+    .hero-form { flex-direction: column; }
+    .hero-form input, .hero-form button { width: 100%; }
+    .cta-buttons { flex-direction: column; align-items: center; }
+    .hero-pills { gap: 0.5rem; }
+  }
+
+  /* ─── SCROLL REVEALS ─── */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">FIND ME A DJ</a>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#djs">Browse DJs</a></li>
+    <li><a href="#for-djs">Join as DJ</a></li>
+    <li><a href="#" class="nav-cta">Get Early Access</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="visualizer" aria-hidden="true" id="visualizer"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">The UK's Premier DJ Booking Platform</p>
+    <h1 class="hero-headline">
+      THE <span>RIGHT</span><br>DJ FOR<br>EVERY NIGHT
+    </h1>
+    <p class="hero-sub">From intimate supper clubs to festival stages — discover and book the perfect DJ for your event, anywhere in the UK.</p>
+
+    <div class="hero-pills">
+      <span class="pill"><span class="pill-dot"></span>Quick Booking</span>
+      <span class="pill"><span class="pill-dot"></span>Vetted DJs</span>
+      <span class="pill"><span class="pill-dot"></span>Transparent Pricing</span>
+    </div>
+
+    <div class="hero-form">
+      <input type="email" placeholder="your@email.com" aria-label="Email address">
+      <button type="button">Get Early Access</button>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>HOUSE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>TECHNO</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AFROBEATS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DRUM & BASS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DISCO</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FUNK & SOUL</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>JUNGLE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>GARAGE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AMAPIANO</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>JAZZ</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>R&B</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>BREAKS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>HOUSE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>TECHNO</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AFROBEATS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DRUM & BASS</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>DISCO</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FUNK & SOUL</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>JUNGLE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>GARAGE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AMAPIANO</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>JAZZ</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>R&B</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>BREAKS</span>
+  </div>
+</div>
+
+<!-- VALUE PROPS -->
+<div class="value-section">
+  <div class="container">
+    <div class="section-label reveal">Why bookers choose us</div>
+    <h2 class="section-heading reveal">BOOKING A DJ<br>SHOULD BE<br><em style="font-style:normal; color: var(--forest-pale);">EASY.</em></h2>
+    <div class="value-grid">
+      <div class="value-card reveal">
+        <span class="value-icon">⚡</span>
+        <h3 class="value-title">QUICK BOOKING</h3>
+        <p class="value-desc">Find and confirm a DJ in minutes, not days. Browse real-time availability, send a request, and get confirmation fast — so you can get on with planning the rest of your event.</p>
+      </div>
+      <div class="value-card reveal">
+        <span class="value-icon">✓</span>
+        <h3 class="value-title">VETTED DJs</h3>
+        <p class="value-desc">Every DJ on the platform is reviewed and approved before they can take bookings. Listen to real mixes, read verified reviews, and book with confidence — no nasty surprises.</p>
+      </div>
+      <div class="value-card reveal">
+        <span class="value-icon">£</span>
+        <h3 class="value-title">TRANSPARENT PRICING</h3>
+        <p class="value-desc">Every DJ lists their rates upfront. No hidden fees, no awkward negotiation. You see exactly what you'll pay before you commit — and payment is held securely until after the event.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOR EVENTS + FOR DJs -->
+<section id="for-who" style="padding-top: 0; padding-bottom: 0; background: var(--white);">
+  <div class="container" style="padding-top: 6rem; padding-bottom: 3rem;">
+    <div class="section-label reveal">Built for both sides of the decks</div>
+    <h2 class="section-heading reveal">WHO'S IT<br>FOR?</h2>
+  </div>
+</section>
+<div class="for-who reveal">
+  <div class="for-panel events">
+    <span class="panel-icon">🎉</span>
+    <h3 class="panel-heading">Booking an event? <span>We've got you.</span></h3>
+    <p class="panel-body">Whether you're running a private party in Manchester or a monthly residency in Bristol, Find Me a DJ surfaces the right talent in seconds — with full track records, mixes, and transparent pricing.</p>
+    <ul class="feature-list">
+      <li>Filter by genre, location, price, and availability</li>
+      <li>Listen to real mixes before you commit</li>
+      <li>Secure payments held in escrow until the gig</li>
+      <li>Instant booking confirmation and contract</li>
+      <li>Support if anything goes sideways</li>
+    </ul>
+    <a href="#" class="btn btn-white">Find a DJ →</a>
+  </div>
+
+  <div id="for-djs" class="for-panel djs">
+    <span class="panel-icon">🎚️</span>
+    <h3 class="panel-heading">A DJ? <span>Earn more.</span></h3>
+    <p class="panel-body">Stop relying on word of mouth. Find Me a DJ puts your profile in front of thousands of bookers actively searching right now. Keep 90% of every booking — we take 10%, nothing more.</p>
+    <ul class="feature-list">
+      <li>Free profile with unlimited mix uploads</li>
+      <li>Set your own rates and availability</li>
+      <li>Get discovered by venues across the UK</li>
+      <li>Automated invoicing and same-day payouts</li>
+      <li>Build your reputation with verified reviews</li>
+    </ul>
+    <a href="#" class="btn btn-forest">Apply to Join →</a>
+  </div>
+</div>
+<div style="margin-bottom: 7rem; background: var(--white);"></div>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how-section">
+  <div class="container">
+    <div class="section-label reveal">Simple by design</div>
+    <h2 class="section-heading reveal">HOW IT<br>WORKS</h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-icon">🔍</div>
+        <h3 class="step-title">SEARCH & FILTER</h3>
+        <p class="step-desc">Browse vetted DJ profiles filtered by genre, vibe, city, availability, and budget. Preview real mixes to hear exactly what you're getting.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-icon">📩</div>
+        <h3 class="step-title">BOOK IN MINUTES</h3>
+        <p class="step-desc">Send a booking request with your event details. DJs confirm within hours. Payment is held securely in escrow until after the event.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-icon">🔊</div>
+        <h3 class="step-title">ENJOY THE NIGHT</h3>
+        <p class="step-desc">Your DJ shows up, sets are played, and the crowd goes off. Funds release automatically. Leave a review and book them again.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DJ PROFILES -->
+<section id="djs" style="background: var(--white);">
+  <div class="container">
+    <div class="section-label reveal">Handpicked talent</div>
+    <h2 class="section-heading reveal">MEET THE<br>DJs</h2>
+    <div class="dj-grid">
+
+      <div class="dj-card reveal">
+        <div class="dj-avatar-placeholder">
+          <div class="avatar-bg" style="background: linear-gradient(135deg, #122a1e 0%, #1a3a2a 50%, #224d38 100%);"></div>
+          <span class="avatar-initials" style="color: #3a8a5e;">SK</span>
+        </div>
+        <div class="dj-overlay"><div class="play-btn">▶</div></div>
+        <div class="dj-info">
+          <h3 class="dj-name">SKYE MORROW</h3>
+          <div class="dj-genre">Deep House · Melodic Techno</div>
+          <div class="dj-location">📍 Manchester · Available weekends</div>
+          <div class="dj-tags">
+            <span class="tag">Clubs</span><span class="tag">Rooftops</span>
+            <span class="tag">Festivals</span><span class="tag">Residencies</span>
+          </div>
+          <div class="dj-footer">
+            <div class="dj-rate">£350 <span>/ set</span></div>
+            <div class="dj-rating"><span class="star">★</span> 4.9 <span style="color:var(--muted)">(87)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dj-card reveal">
+        <div class="dj-avatar-placeholder">
+          <div class="avatar-bg" style="background: linear-gradient(135deg, #1e2e1e 0%, #2a3e28 50%, #1a3a2a 100%);"></div>
+          <span class="avatar-initials" style="color: #7abf8e;">OA</span>
+        </div>
+        <div class="dj-overlay"><div class="play-btn">▶</div></div>
+        <div class="dj-info">
+          <h3 class="dj-name">OBINNA ADE</h3>
+          <div class="dj-genre">Afrobeats · Amapiano · Dancehall</div>
+          <div class="dj-location">📍 Birmingham · Available most nights</div>
+          <div class="dj-tags">
+            <span class="tag">Weddings</span><span class="tag">Parties</span>
+            <span class="tag">Bars</span><span class="tag">Pop-ups</span>
+          </div>
+          <div class="dj-footer">
+            <div class="dj-rate">£275 <span>/ set</span></div>
+            <div class="dj-rating"><span class="star">★</span> 5.0 <span style="color:var(--muted)">(52)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dj-card reveal">
+        <div class="dj-avatar-placeholder">
+          <div class="avatar-bg" style="background: linear-gradient(135deg, #0f2218 0%, #1a3a2a 50%, #122a1e 100%);"></div>
+          <span class="avatar-initials" style="color: #5ab07a;">RX</span>
+        </div>
+        <div class="dj-overlay"><div class="play-btn">▶</div></div>
+        <div class="dj-info">
+          <h3 class="dj-name">RAYA CROSS</h3>
+          <div class="dj-genre">Drum & Bass · Jungle · Breaks</div>
+          <div class="dj-location">📍 Bristol · Fri–Sun</div>
+          <div class="dj-tags">
+            <span class="tag">Clubs</span><span class="tag">Raves</span>
+            <span class="tag">Warehouses</span>
+          </div>
+          <div class="dj-footer">
+            <div class="dj-rate">£425 <span>/ set</span></div>
+            <div class="dj-rating"><span class="star">★</span> 4.8 <span style="color:var(--muted)">(134)</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center; margin-top: 2.5rem;">
+      <a href="#" class="btn btn-outline">Browse All DJs →</a>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section style="background: var(--off-white);">
+  <div class="container">
+    <div class="section-label reveal">Straight from the dancefloor</div>
+    <h2 class="section-heading reveal">THEY SAID<br>IT LOUD</h2>
+    <div class="reviews-grid">
+
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Booked Skye for our rooftop launch party in Manchester. The vibe was absolutely immaculate — guests were asking who the DJ was all night. Booked again the very next week."</p>
+        <div class="review-author">
+          <div class="author-avatar" style="background: var(--forest);">JH</div>
+          <div>
+            <div class="author-name">James H.</div>
+            <div class="author-role">Events Director · The Warehouse Project</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"We needed a last-minute DJ for a private birthday dinner in Edinburgh — Find Me a DJ found us Obinna in under 20 minutes. Seamless booking, proper talent. Exactly what the UK needed."</p>
+        <div class="review-author">
+          <div class="author-avatar" style="background: var(--forest-mid);">PM</div>
+          <div>
+            <div class="author-name">Priya M.</div>
+            <div class="author-role">Private Events · Edinburgh</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"As a DJ, Find Me a DJ has completely changed my income. I went from 2 gigs a month to 8. The platform handles contracts, payments, everything. I just focus on the music."</p>
+        <div class="review-author">
+          <div class="author-avatar" style="background: var(--forest-deep);">RC</div>
+          <div>
+            <div class="author-name">Raya C.</div>
+            <div class="author-role">DJ · Bristol</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div style="position: relative; z-index: 2;">
+    <h2 class="cta-heading">READY TO<br>MAKE SOME<br><span>NOISE?</span></h2>
+    <p class="cta-sub">Join event bookers and DJs already on the platform. Early access is free.</p>
+    <div class="cta-buttons">
+      <a href="#" class="btn btn-white">Book a DJ →</a>
+      <a href="#" class="btn-outline-light">Apply as a DJ</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">FIND ME A DJ</div>
+      <div class="footer-tagline">The right DJ. Anywhere in the UK.</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#">Browse DJs</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Trust & Safety</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>For DJs</h4>
+        <ul>
+          <li><a href="#">Apply to Join</a></li>
+          <li><a href="#">DJ Resources</a></li>
+          <li><a href="#">Earnings</a></li>
+          <li><a href="#">DJ Stories</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Find Me a DJ Ltd. · Registered in England & Wales</div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const viz = document.getElementById('visualizer');
+  for (let i = 0; i < 80; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    const height = Math.random() * 140 + 20;
+    const dur = (Math.random() * 0.8 + 0.7).toFixed(2);
+    const delay = (Math.random() * 1.5).toFixed(2);
+    bar.style.cssText = `height:${height}px; --dur:${dur}s; animation-delay:-${delay}s;`;
+    viz.appendChild(bar);
+  }
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  document.querySelector('.hero-form button').addEventListener('click', function() {
+    const input = document.querySelector('.hero-form input');
+    if (input.value && input.value.includes('@')) {
+      this.textContent = '✓ You\'re on the list';
+      this.style.background = '#224d38';
+      input.value = '';
+      input.placeholder = 'See you on the dancefloor.';
+    } else {
+      input.style.outline = '1px solid #c0392b';
+      input.placeholder = 'Enter a valid email...';
+      setTimeout(() => input.style.outline = '', 800);
+    }
+  });
+</script>
+
+</body>
+</html>
